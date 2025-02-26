@@ -1,0 +1,1 @@
+export PATH=$PATH:$HOME/.dotnet/tools:$PATH:$HOME/.local/bin:$HOME/.emacs.d/bin

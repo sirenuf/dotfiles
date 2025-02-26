@@ -1,0 +1,6 @@
+alias ls="eza --group --icons"
+alias cat="bat -Pp"
+alias ffetch="fastfetch"
+alias ip="ip --color=always"
+alias open="xdg-open"
+alias rm="rm -i"
