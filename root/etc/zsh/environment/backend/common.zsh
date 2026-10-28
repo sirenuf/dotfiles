@@ -16,3 +16,6 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 if [[ $TERM == "linux" ]]; then
   export TERM="linux-16color"
 fi
+
+# Make git put the config in .config instead.
+mkdir -p $XDG_CONFIG_HOME/git && touch $XDG_CONFIG_HOME/git/config

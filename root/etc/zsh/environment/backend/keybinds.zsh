@@ -1,45 +1,34 @@
-# Use normal (bash-like) editing, no matter what $EDITOR is.
-# Without this, zsh switches to vi-style if $EDITOR contains "vi".
+# Set zsh in "emacs mode", like bash
+# instead of $EDITOR dependent.
 bindkey -e
-
-# Look up what this terminal sends for each key (see: man 5 terminfo).
-typeset -g -A key
-key[Home]="${terminfo[khome]}"
-key[End]="${terminfo[kend]}"
-key[Delete]="${terminfo[kdch1]}"
-key[PageUp]="${terminfo[kpp]}"
-key[PageDown]="${terminfo[knp]}"
-key[Shift-Tab]="${terminfo[kcbt]}"
-key[Control-Left]="${terminfo[kLFT5]}"
-key[Control-Right]="${terminfo[kRIT5]}"
-key[Control-Delete]="${terminfo[kDC5]}"
-
-# Reserved for PageDown and PageUp.
-# Because zsh can't control terminal
-# emulator scroll.
-_do_nothing() {}
-zle -N _do_nothing
-
-# Bind them (skipped if the terminal doesn't have that key).
-[[ -n "${key[Home]}"           ]] && bindkey -- "${key[Home]}"           beginning-of-line
-[[ -n "${key[End]}"            ]] && bindkey -- "${key[End]}"            end-of-line
-[[ -n "${key[Delete]}"         ]] && bindkey -- "${key[Delete]}"         delete-char
-[[ -n "${key[PageUp]}"         ]] && bindkey -- "${key[PageUp]}"         _do_nothing
-[[ -n "${key[PageDown]}"       ]] && bindkey -- "${key[PageDown]}"       _do_nothing
-[[ -n "${key[Shift-Tab]}"      ]] && bindkey -- "${key[Shift-Tab]}"      reverse-menu-complete
-[[ -n "${key[Control-Left]}"   ]] && bindkey -- "${key[Control-Left]}"   backward-word
-[[ -n "${key[Control-Right]}"  ]] && bindkey -- "${key[Control-Right]}"  forward-word
-[[ -n "${key[Control-Delete]}" ]] && bindkey -- "${key[Control-Delete]}" kill-word
 
 # Ctrl+Backspace has no terminfo name. Konsole usually sends ^H.
 bindkey '^H' backward-kill-word
 
-# Put the terminal in "application mode" while editing a line.
-# Only then do the terminfo sequences above match what the keys send.
-if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
-  autoload -Uz add-zle-hook-widget
-  function zle_application_mode_start { echoti smkx }
-  function zle_application_mode_stop { echoti rmkx }
-  add-zle-hook-widget -Uz zle-line-init zle_application_mode_start
-  add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
-fi
+# Do nothing on PG UP/DOWN.
+# I don't like the history searching it does.
+function do_nothing() {}
+zle -N do_nothing
+
+function bindkey_all() {
+  local widget=$1 sequence
+  shift
+
+  for sequence in "$@"; do
+    [[ -n $sequence ]] && bindkey -- "$sequence" $widget
+  done
+}
+
+#           widget                 terminfo             fallbacks
+bindkey_all beginning-of-line     "${terminfo[khome]}" $'\e[H' $'\eOH' $'\e[1~' $'\e[7~'
+bindkey_all end-of-line           "${terminfo[kend]}"  $'\e[F' $'\eOF' $'\e[4~' $'\e[8~'
+bindkey_all delete-char           "${terminfo[kdch1]}" $'\e[3~'
+bindkey_all do_nothing            "${terminfo[kpp]}"   $'\e[5~'
+bindkey_all do_nothing            "${terminfo[knp]}"   $'\e[6~'
+bindkey_all reverse-menu-complete "${terminfo[kcbt]}"  $'\e[Z'
+bindkey_all backward-word         "${terminfo[kLFT5]}" $'\e[1;5D' $'\e[5D' $'\eOd'
+bindkey_all forward-word          "${terminfo[kRIT5]}" $'\e[1;5C' $'\e[5C' $'\eOc'
+bindkey_all kill-word             "${terminfo[kDC5]}"  $'\e[3;5~' $'\e[3^'
+
+unfunction bindkey_all
+unfunction do_nothing

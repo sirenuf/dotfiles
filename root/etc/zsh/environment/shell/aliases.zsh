@@ -4,6 +4,10 @@ alias_if_exists   ls      "--group --icons auto"  eza
 alias_if_exists   ffetch  ""                      fastfetch
 alias_if_exists   open    ""                      xdg-open
 alias_if_exists   rm      "-i"
+alias_if_exists   ffmpeg  "-hide_banner"
+alias_if_exists   ffprobe "-hide_banner"
+alias_if_exists   ffplay  "-hide_banner"
+
 
 touch $ZSH_ALIASES_CACHED_FILE
 

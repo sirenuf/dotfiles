@@ -1,20 +1,18 @@
-# Full path because this is a global config.
-config_dir=/etc/zsh
-environment_dir=$config_dir/environment
+# Make sure this shit exists
+mkdir -p "$ZDOTDIR" && touch "$ZDOTDIR/.zshrc"
 
-source $config_dir/variables.zsh
+# Always needs to be defined in each core file.
+local zcfg_config_dir="/etc/zsh"
+source "$zcfg_config_dir/variables.zsh"
 
 # Make sure to set backend stuff first.
-for file in $environment_dir/backend/*.zsh; do
+for file in $zcfg_environment_dir/backend/*.zsh; do
   source $file;
 done
 
-for file in $environment_dir/shell/*.zsh; do
+for file in $zcfg_environment_dir/shell/*.zsh; do
   source $file;
 done
 
-unset -m 'zcfg_*'
-
-unset config_dir
-unset environment_dir
 unset file
+unset -m 'zcfg_*'

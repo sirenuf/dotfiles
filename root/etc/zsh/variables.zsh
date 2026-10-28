@@ -1,3 +1,11 @@
+# The config dir should always be expected to be /etc/zsh
+# do not change this.
+local zcfg_config_dir="/etc/zsh"
+
+local zcfg_environment_dir="$zcfg_config_dir/environment"
+
+local zcfg_static_env_file="/etc/environment.d/50-enuf.conf"
+
 # The expected primary user(s)
 # if matches username turns yellow.
 local zcfg_primary_users=("viktor")

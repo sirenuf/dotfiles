@@ -1,0 +1,10 @@
+# /etc/zsh/zshenv
+# This file is always read by zsh when a new zsh is spawned. Regardless of caller.
+
+# Always needs to be defined in each core file.
+source "/etc/zsh/variables.zsh"
+
+# Import and export all declarations from the environment.d file
+() { setopt localoptions allexport; source $zcfg_static_env_file }
+
+unset -m 'zcfg_*'
