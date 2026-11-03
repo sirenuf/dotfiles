@@ -23,7 +23,7 @@ zstyle ':completion:*' menu select                        # Highlighted menu on 
 
 # vcs
 zstyle ':vcs_info:*' enable git
-zstyle ':vcs_info:git:*' formats ' 󰊢 %F{13}%b%f'
+zstyle ':vcs_info:git:*' formats ' %F{13} %b%f'
 
 # compinit setup
 compinit -d $ZSH_CACHE_DIR/zcompdump                      # Allows subcommands completion for e.g. git or ssh.
