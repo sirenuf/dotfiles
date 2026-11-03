@@ -33,5 +33,5 @@ else
   prompt_symbol="#"
 fi
 
-PROMPT="%B[%b%F{$user_color}%n%f@%F{$hostname_color}%m%f %B%F{white}%~%f]%b"$'\n'"$prompt_symbol "
+PROMPT="[%b%F{$user_color}%n%f@%F{$hostname_color}%m%f %B%F{15}%~%f%b]"$'\n'"$prompt_symbol "
 }

@@ -6,11 +6,11 @@ local zcfg_config_dir="/etc/zsh"
 source "$zcfg_config_dir/variables.zsh"
 
 # Make sure to set backend stuff first.
-for file in $zcfg_environment_dir/backend/*.zsh; do
+for file in $zcfg_rc_dir/backend/*.zsh; do
   source $file;
 done
 
-for file in $zcfg_environment_dir/shell/*.zsh; do
+for file in $zcfg_rc_dir/shell/*.zsh; do
   source $file;
 done
 

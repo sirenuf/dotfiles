@@ -3,6 +3,7 @@
 local zcfg_config_dir="/etc/zsh"
 
 local zcfg_environment_dir="$zcfg_config_dir/environment"
+local zcfg_rc_dir="$zcfg_environment_dir/rc"
 
 local zcfg_static_env_file="/etc/environment.d/50-enuf.conf"
 
