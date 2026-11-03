@@ -13,4 +13,5 @@ exit logout() { _skip_history_writing; builtin $0 "$@" }
 
 precmd_functions+=(
   _fix_cursor
+  vcs_info
 )
