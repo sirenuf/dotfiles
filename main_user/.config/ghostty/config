@@ -1,0 +1,15 @@
+font-family = Terminess Nerd Font Mono
+theme = tango-custom
+
+background-opacity = 0.85
+cursor-style = bar
+
+shell-integration-features=ssh-env
+
+# Makes ghostty send the same as alt + enter, instead of garbage
+keybind = shift+enter=text:\x1b\r
+
+keybind = page_up=scroll_page_up
+keybind = page_down=scroll_page_down
+
+bell-features = system
