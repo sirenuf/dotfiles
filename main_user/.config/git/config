@@ -1,0 +1,8 @@
+# Defaults
+# Make sure github remotes always use ssh
+[url "git@github.com:"]
+    insteadOf = https://github.com/
+
+# To suppress the ugly notice.
+[init]
+    defaultBranch = master
