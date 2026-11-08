@@ -3,9 +3,11 @@ if [[ $TERM == "linux" ]]; then
   export TERM="linux-16color"
 fi
 
-# Make git put the config in .config instead.
-mkdir -p $XDG_CONFIG_HOME/git && touch $XDG_CONFIG_HOME/git/config
-
+# Make git use ~/.config/git/config instead of ~/.gitconfig
+if [[ -n "$GIT_CONFIG_GLOBAL" && ! -f "$GIT_CONFIG_GLOBAL" ]]; then
+    mkdir -p "${GIT_CONFIG_GLOBAL:h}"
+    touch "$GIT_CONFIG_GLOBAL"
+fi
 
 autoload -U compinit                                      # Declare function compinit
 autoload -Uz vcs_info                                     # Enables version-control info in prompt
