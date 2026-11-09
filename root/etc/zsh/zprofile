@@ -1,12 +1,14 @@
-emulate sh -c 'source /etc/profile'
-
-# The /etc/profile file is loaded once for each user.
-# all of your own path and export definitions should
-# be here.
+# /etc/zsh/zprofile
+#
+# The `profile` file of a shell is loaded once for each user.
+# all of your own path and export definitions should  be here.
 #
 # Exports where $HOME is used therefore need to go in
 # zshenv so they are always recomputed. Even on
 # dynamic user switching.
+
+# TODO: Probably redundant
+emulate sh -c 'source /etc/profile'
 
 # Always needs to be defined in each core file.
 local zcfg_config_dir="/etc/zsh"

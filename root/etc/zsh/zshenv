@@ -1,5 +1,6 @@
 # /etc/zsh/zshenv
-# This file is always read by zsh when a new zsh is spawned. Regardless of caller.
+#
+# This file is always read by zsh when a new zsh process is spawned
 
 # Always needs to be defined in each core file.
 source "/etc/zsh/variables.zsh"

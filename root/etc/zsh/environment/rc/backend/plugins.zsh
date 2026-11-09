@@ -1,5 +1,12 @@
-() { # anonymous to prevent leaking.
+# plugins.zsh
+#
+# Plugins should be handled by the distributions package manager preferrably.
+#
+# Recursively scan /usr/share/zsh for plugins. Plugins are usually packaged differently
+# but share the same filename which ZSH source's to load them.
 
+# anonymous to prevent leaking.
+() { 
 local file plugin
 local search_path=/usr/share
 

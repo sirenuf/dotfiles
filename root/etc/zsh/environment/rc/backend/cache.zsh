@@ -1,3 +1,7 @@
+# cache.zsh
+#
+# Setup ZSH cache to respect the XDG environment
+
 ZSH_CACHE_DIR=$XDG_CACHE_HOME/zsh
 ZSH_ALIASES_CACHED_FILE=$ZSH_CACHE_DIR/aliases_cached
 

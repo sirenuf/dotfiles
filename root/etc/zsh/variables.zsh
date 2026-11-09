@@ -1,3 +1,7 @@
+# variables.zsh
+#
+# Global variables used by the config
+
 # The config dir should always be expected to be /etc/zsh
 # do not change this.
 local zcfg_config_dir="/etc/zsh"

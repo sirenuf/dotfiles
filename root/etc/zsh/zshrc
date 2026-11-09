@@ -1,3 +1,7 @@
+# /etc/zsh/zshrc
+#
+# Autoexec when a new interactive shell a given user is created.
+
 # Make sure this shit exists
 mkdir -p "$ZDOTDIR" && touch "$ZDOTDIR/.zshrc"
 
