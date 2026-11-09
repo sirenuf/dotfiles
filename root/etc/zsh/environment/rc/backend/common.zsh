@@ -1,13 +1,12 @@
-# Always assume the linux tty supports 16 colours.
-if [[ $TERM == "linux" ]]; then
-  export TERM="linux-16color"
-fi
+# common.zsh
+# 
+# Setup different backend options in the shell.
 
-# Make git use ~/.config/git/config instead of ~/.gitconfig
-if [[ -n "$GIT_CONFIG_GLOBAL" && ! -f "$GIT_CONFIG_GLOBAL" ]]; then
-    mkdir -p "${GIT_CONFIG_GLOBAL:h}"
-    touch "$GIT_CONFIG_GLOBAL"
-fi
+# the "linux" tty has a broken terminfo and doesn't advertise ansi 16 colour support
+# even if the framebuffer renders ansi colours just fine.
+# if you force this to linux-16color it makes programs use the right terminfo actually
+# compatible with the framebuffer.
+[[ $TERM == "linux" ]] && export TERM="linux-16color"
 
 autoload -U compinit                                      # Declare function compinit
 autoload -Uz vcs_info                                     # Enables version-control info in prompt
