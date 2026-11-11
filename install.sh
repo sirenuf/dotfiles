@@ -10,10 +10,20 @@ local absolute_script_path="${0:A}"
 
 local local_root_dir="root"
 local local_user_dir="main_user"
+local local_darwin_dir="darwin"
 
 local is_there_a_user_conflict=false
 
 local user_home=$HOME
+
+# Folders in `root/` that will get copied by any system are in this array.
+# It is only on Linux were the entire `root/` folder is copied to `/`
+local posix_reserved_folders=(
+    "etc/zsh"
+    "etc/environment.d"
+)
+local is_os_linux=false
+local is_os_darwin=false
 
 # Help command
 if (( $#opt_help )); then
@@ -31,6 +41,27 @@ if (( $#opt_help )); then
   exit 0
 fi
 
+function common_set_os_type()
+{
+  case "$(uname -s)" in
+    Darwin)
+      is_os_darwin=true
+      if [ -x "/opt/homebrew/bin/brew" ]; then
+	echo "Applied brew env for Darwin."
+	eval "$(/opt/homebrew/bin/brew shellenv)"
+      else
+	echo "No '/opt/homebrew/bin/brew' file found."
+      fi
+      ;;
+    Linux)
+      is_os_linux=true
+      ;;
+    *)
+      echo "Your os type $(uname -s) is unsupported."
+      exit 1
+      ;;
+  esac
+}
 
 # Get access to a proper elevate command
 function root_check_elevate_commands()
@@ -41,6 +72,21 @@ function root_check_elevate_commands()
   else
     print "Need sudo, doas or run0."
     exit 1
+  fi
+}
+
+function root_backup_darwin_zsh()
+{
+  if [[ ! -f "/etc/zshrc.bak" && -f "/etc/zshrc" ]]; then
+    mv "/etc/zshrc" "/etc/zshrc.bak" || exit 1
+  fi
+
+  if [[ ! -f "/etc/zprofile.bak" && -f "/etc/zprofile" ]]; then
+    mv "/etc/zprofile" "/etc/zprofile.bak" || exit 1
+  fi
+
+  if [[ ! -f "/etc/zshenv.bak" && -f "/etc/zshenv" ]]; then
+    mv "/etc/zshenv" "/etc/zshenv.bak" || exit 1
   fi
 }
 
@@ -65,7 +111,25 @@ function root_install_global_cfg()
     mv "/etc/zsh" "/etc/zsh.bak" || exit 1
   fi
 
-  rsync -r --chown=root:root "$local_root_dir/." "/" || exit 1
+  if [[ $is_os_linux == true ]]; then
+    echo "Installing for target Linux."
+    rsync -r --chown=0:0 "$local_root_dir/." "/" || exit 1
+
+  elif [[ $is_os_darwin == true ]]; then
+    echo "Installing for target OS X."
+    for folder in $posix_reserved_folders; do
+      rsync -r --chown=0:0 "$local_root_dir/$folder/" "/$folder" || exit 1
+    done
+
+    # Backup the original zsh files.
+    root_backup_darwin_zsh
+    # Then install the replacements.
+    rsync -r --chown=0:0 "$local_darwin_dir/." "/etc/" 
+
+  else
+    echo "Can't install the config globally because your system type is unidentified."
+    exit 1
+  fi
 }
 
 function common_cd_to_projectroot()
@@ -160,7 +224,8 @@ function run_script()
   # Make sure we are in the working directory
   common_cd_to_projectroot
   common_check_vital_dependencies
-
+  common_set_os_type
+  
   if (( $#opt_systemonly )); then
     root_install_global_cfg
     exit

@@ -14,7 +14,11 @@ autoload -Uz vcs_info                                     # Enables version-cont
 setopt interactive_comments                               # Allow comments inside the prompt 
 setopt prompt_subst                                       # So vcs_info can get re-eval'd in my prompt
 
-eval "$(dircolors -b)"                                    # Sets proper LS_COLORS env, so programs have proper colour support. 
+if [[ $(uname -s) != "Darwin" ]]; then
+    eval "$(dircolors -b)"                                # Sets proper LS_COLORS env, so programs have proper colour support. 
+else
+    export LS_COLORS="$(vivid generate ansi)"
+fi
 
 # Makes sudo only use real auto completes
 zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin

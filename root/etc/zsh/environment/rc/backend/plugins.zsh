@@ -8,7 +8,10 @@
 # anonymous to prevent leaking.
 () { 
 local file plugin
-local search_path=/usr/share
+local search_paths=(
+    "/usr/share"
+    "/opt/homebrew/share"
+)
 
 local plugins=(
   zsh-syntax-highlighting
@@ -16,7 +19,10 @@ local plugins=(
 )
 
 # (N) hides 'no matches found' error.
-local files=($search_path/zsh*/**/*.zsh(N))
+local files=(
+    $search_paths[1]/zsh*/**/*.zsh(N)
+    $search_paths[2]/zsh*/**/*.zsh(N)
+)
 
 # Search for every plugin recursively.
 for plugin in $plugins; do
