@@ -212,7 +212,7 @@ function user_check_for_conflicts_in_home()
 function user_install_user_cfg_to_home()
 {
   if [[ $is_there_a_user_conflict == false ]]; then
-    rsync -r --chown=$USER:$USER "$local_user_dir/." "$user_home" || exit 1
+    rsync -r --chown=$(id -un):$(id -gn) "$local_user_dir/." "$user_home" || exit 1
     return 0
   fi
 
